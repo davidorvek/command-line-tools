@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+import json
+import sys
+
+if len(sys.argv) < 2:
+    print('Error: Not enough arguments. See help screen (invoked with encrypt -h)', file = sys.stderr)
+    sys.exit()
+
+elif len(sys.argv) == 2:
+    if sys.argv[1] == '-h':
+        with open('/users/davidorvek/command-line-tools/helpscrn/encrypt.hlp', 'r') as file:
+            contents = file.read()
+        print(contents)
+        sys.exit()
+    else:
+        print('Error: Not enough arguments. See help screen (invoked with encrypt -h)', file = sys.stderr)
+        sys.exit()
+
+elif len(sys.argv) == 3:
+    print('Error: Not enough arguments. See help screen (invoked with encrypt -h)', file = sys.stderr)
+    sys.exit()
+
+## Correct number of arguments
+elif len(sys.argv) == 4:
+    option = sys.argv[1]
+    text_file = sys.argv[2]
+    dictionary_file = sys.argv[3]
+
+    sep = '.'
+
+    if option == '-e':
+        output_file = text_file.split(sep)[0] + '_encrypted' + '.txt'
+    elif option == '-d':
+        output_file = text_file.split(sep)[0] + '_decrypted' + '.txt'
+    else:
+        print('Error: Invalid option. See help screen (invoked with encrypt -h)', file = sys.stderr)
+        sys.exit()
+
+    ## Checks to see that the second argument is a file and can be opened
+    try:
+        open(text_file, 'r')
+    except:
+        print('Error: "%s" cannot be opened. See help screen (invoked with encrypt -h)' % (text_file), file = sys.stderr)
+        sys.exit()
+
+    ## If all these tests pass, then this will run
+    with open(text_file) as input_text:
+        text = input_text.read()
+
+    try:
+        with open(dictionary_file, 'r') as input_dictionary:
+            dictionary = json.load(input_dictionary)
+    except:
+        print('Error: Third argument must be a json file. See help screen (invoked with encrypt -h)', file = sys.stderr)
+        sys.exit()
+
+    with open(output_file, 'w+') as output_text:
+        for char in text:
+            output_text.write(dictionary[char])
+
+else:
+    print('Error: Too many arguments. See help screen (invoked with encrypt -h)', file = sys.stderr)
+    sys.exit()

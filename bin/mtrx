@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+import pctools as pct
+import sys
+
+allowable_input = '0123456789TE'
+input_length = len(sys.argv)
+
+# Input is either coming from a pipe or the user has just entered the script name
+if input_length == 1:
+    try:
+        rows = [i.rstrip() for i in sys.stdin.readlines()]
+    except:
+        print('\nERROR: Please enter a tone row', file = sys.stderr)
+        sys.exit()
+
+# Input is coming from the user
+elif input_length == 2:
+    # Check for -h
+    if sys.argv[1] == '-h':
+        with open('/users/davidorvek/command-line-tools/helpscrn/mtrx.hlp', 'r') as file:
+            contents = file.read()
+        print(contents)
+        sys.exit()
+    # Check for another option (not allowed)
+    elif sys.argv[1][0] == '-' and sys.argv[1] != '-h':
+        print('ERROR: No options available for mtrx', file = sys.stderr)
+        sys.exit()
+    else:
+        row = sys.argv[1]
+
+# Too many arguments
+else:
+    print('ERROR: Too many arguments. See help screen (invoked with mtrx -h) for correct usage', file = sys.stderr)
+    sys.exit()
+
+## Catches common alternatives for fow notation
+# Multiple rows from stdin
+try:
+    if rows:
+        for row in rows:
+            rep_with_T = ['t', 'a', 'A']
+            rep_with_E = ['e', 'b', 'B']
+            for i in rep_with_T:
+                if i in row:
+                    row = row.replace(i, 'T')
+            for j in rep_with_E:
+                if j in row:
+                    row = row.replace(j, 'E')
+
+            # Checks row for invalid characters
+            for k in row:
+                if k not in allowable_input:
+                    print("ERROR: '%s' is not a valid character" % (k), file = sys.stderr)
+                    sys.exit()
+
+            # Converts input to a list, generates the matrix, and prints it
+            pct.print_matrix(pct.string2array(row))
+
+# One row from user
+except:
+    rep_with_T = ['t', 'a', 'A']
+    rep_with_E = ['e', 'b', 'B']
+    for i in rep_with_T:
+        if i in row:
+            row = row.replace(i, 'T')
+    for j in rep_with_E:
+        if j in row:
+            row = row.replace(j, 'E')
+
+    # Checks row for invalid characters
+    for k in row:
+        if k not in allowable_input:
+            print("ERROR: '%s' is not a valid character" % (k), file = sys.stderr)
+            sys.exit()
+    # Converts input to a list, generates the matrix, and prints it
+    pct.print_matrix(pct.string2array(row))

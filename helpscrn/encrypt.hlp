@@ -1,0 +1,17 @@
+
+ENCRYPT: Creates an encrypted or decrypted version of a file using a given json encryption/decryption file
+
+Inputs processed:
+	
+	-A text file
+
+Syntax:
+	
+	encrypt [-ed] [file] [json file]
+
+Options:
+	
+	-h :  print the help screen
+	-e : outputs an encrypted file
+	-d : outputs a decrypted file
+

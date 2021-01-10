@@ -1,0 +1,24 @@
+
+REL: Finds the relationship (if any) between two given pitch-class sets
+
+This command checks to see if two given sets are:
+	
+	-related by transposition
+	-related by inversion
+	-related by multiplication
+	-z related (have the same interval vector)
+	-complements
+
+Inputs processed:
+	
+	-Two pitch-class sets in the form of strings with no spaces that use
+	the integers 0-9 and T and E for 10 and 11
+
+Syntax:
+	
+	rel [pcset1] [pcset2]
+
+Options:
+	
+	-h :  print the help screen
+

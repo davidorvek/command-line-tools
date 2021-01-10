@@ -1,0 +1,16 @@
+
+RNDSET: Generates a random pitch-class set of size n
+
+Inputs processed:
+
+	An integer n where 0 < n < 13.
+	If n is not provided, n is a random integer n where 2 <= n <= 10
+
+Syntax:
+
+	rndset [n]
+
+Options:
+
+	-h : print the help screen
+

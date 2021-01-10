@@ -1,0 +1,17 @@
+
+TRNS: Transposes a given pitch-class set up a given number of semitones
+
+Inputs processed:
+	
+	-A pitch-class set in the form of a string with no spaces that uses
+	the integers 0-9 and T and E for 10 and 11
+	-An a transpositional index from 0-11
+
+Syntax:
+	
+	trns [pcset] [axis]
+
+Options:
+	
+	-h :  print the help screen
+

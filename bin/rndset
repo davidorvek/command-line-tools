@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+import pctools as pct
+import sys
+
+if len(sys.argv) == 1:
+    print(pct.array2string(pct.rand_set()))
+    sys.exit()
+
+elif len(sys.argv) == 2:
+    if sys.argv[1] == '-h':
+        with open('/users/davidorvek/command-line-tools/helpscrn/rndset.hlp', 'r') as file:
+            contents = file.read()
+        print(contents)
+        sys.exit()
+    else:
+        try:
+            n = int(sys.argv[1])
+        except:
+            print('ERROR: Not a valid size. See help screen (invoked with rndset -h)', file = sys.stderr)
+            sys.exit()
+
+else:
+    print('ERROR: Too many arguments. See help screen (invoked with rndset -h) for correct usage', file = sys.stderr)
+    sys.exit()
+
+if n > 0 and n < 13:
+    print(pct.array2string(pct.rand_set(n)))
+else:
+    print('ERROR: Not a valid size. See help screen (invoked with rndset -h)', file = sys.stderr)
+    sys.exit()

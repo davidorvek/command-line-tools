@@ -1,0 +1,34 @@
+
+SC: Retrieves various information about the given set class
+
+This command can print the following for the given set class:
+
+	-prime form
+	-interval vector
+	-z partner (if applicable)
+	-set class related by the multiplicative transformation
+	-complement
+	-degrees of symmetry
+	-transpositional invariance vector
+	-inversional invariance vector
+
+Inputs processed:
+
+	Forte numbers of the form X-XX or X-zXX if a z set
+
+Syntax:
+
+	sc [-h|-a|-p-|-v|-z|-m|-c|-s|-t|-i] [Forte number]
+
+Options:
+
+	-p : print the prime form of the given set class
+	-v : print the interval vector of the given set class
+	-z : print the set class that is z related to the given set class
+	-m : print the set class that is M related to the given set class
+	-c : print the set class that is the complement of the given set class
+	-s : print the degrees of symmetry (t,i) for the given set class
+	-t : print the transpositional invariance vector for the given set class
+	-i : print the inversional invariance vector for the given set class
+	-a (default) : print all of the above
+	-h : print the help screen

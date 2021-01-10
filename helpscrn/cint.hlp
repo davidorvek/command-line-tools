@@ -1,0 +1,17 @@
+
+CINT: Prints a vector containing the intervals found between adjacent pitch
+	classes in the given pitch-class set
+
+Inputs processed:
+
+	A pitch-class set in the form of a string with no spaces that uses
+	the integers 0-9 and T and E for 10 and 11 
+
+Syntax:
+
+	cint [pitch-class set]
+
+Options:
+
+	-h : print the help screen
+

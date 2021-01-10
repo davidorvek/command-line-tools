@@ -1,0 +1,11 @@
+#!/usr/local/bin/bash
+
+printf "To: "
+read to
+
+printf "Subject: "
+read subject
+
+vim message.tmp
+./send_mail.py $to $subject message.tmp
+rm message.tmp

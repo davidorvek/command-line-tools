@@ -1,0 +1,15 @@
+
+ALLINTROW: Generates an all-interval twelve-tone row
+
+Inputs processed:
+
+	NONE
+
+Syntax:
+
+	allintrow
+
+Options:
+
+	-h : print the help screen
+

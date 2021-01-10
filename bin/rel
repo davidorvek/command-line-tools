@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+import pctools as pct
+import sys
+
+allowable_pc_input = '0123456789TE'
+input_length = len(sys.argv)
+
+# Not enough arguments
+if input_length == 1:
+    print('ERROR: Not enough arguments. See help screen (invoked with rel -h)', file = sys.stderr)
+    sys.exit()
+
+# Pcset1 must be coming from pipe or not enough arguments
+elif input_length == 2:
+    if sys.argv[1] == '-h':
+        with open('/users/davidorvek/command-line-tools/helpscrn/rel.hlp', 'r') as file:
+            contents = file.read()
+        print(contents)
+        sys.exit()
+    else:
+        try:
+            pcset1 = sys.stdin.read().rstrip()
+        except:
+            print('\nERROR: Not enough arguments. See help screen (invoked with rel -h) for correct usage', file = sys.stderr)
+            sys.exit()
+        pcset2 = sys.argv[1]
+
+# Both pcsets must be coming from the user
+elif input_length == 3:
+    pcset1 = sys.argv[1]
+    pcset2 = sys.argv[2]
+
+# Too many arguments
+else:
+    print('ERROR: Too many arguments. See help screen (invoked with rel -h) for correct usage', file = sys.stderr)
+    sys.exit()
+
+# Catches common alternatives for pcset notation
+rep_with_T = ['t', 'a', 'A']
+rep_with_E = ['e', 'b', 'B']
+for i in rep_with_T:
+    if i in pcset1:
+        pcset1 = pcset1.replace(i, 'T')
+    if i in pcset2:
+        pcset2 = pcset2.replace(i, 'T')
+
+for j in rep_with_E:
+    if j in pcset1:
+        pcset1 = pcset1.replace(j, 'E')
+    if j in pcset2:
+        pcset2 = pcset2.replace(j, 'E')
+
+# Checks pcset input
+for k in pcset1:
+    if k not in allowable_pc_input:
+        print("ERROR: '%s' is not a valid character" % (k), file = sys.stderr)
+        sys.exit()
+
+for l in pcset1:
+    if l not in allowable_pc_input:
+        print("ERROR: '%s' is not a valid character" % (l), file = sys.stderr)
+        sys.exit()
+
+relation = pct.find_rel(pct.string2array(pcset1), pct.string2array(pcset2))
+ti_relations = []
+
+if relation['T'] != []:
+    for m in relation['T']:
+        ti_relations.append('T%s' % (m))
+
+if relation['I'] != []:
+    for n in relation['I']:
+        ti_relations.append('I%s' % (n))
+
+if ti_relations != []:
+    print('%s and %s are related by %s' % (pcset1, pcset2, ', '.join(ti_relations)))
+
+if relation['M'] != 'NO':
+    print('%s and %s are M related' % (pcset1, pcset2))
+
+if relation['Z'] != 'NO':
+    print('%s and %s are Z related' % (pcset1, pcset2))
+
+if relation['C'] != 'NO':
+    print('%s and %s are complements' % (pcset1, pcset2))
+
+if relation['T'] == [] and relation['I'] == [] and relation['M'] == 'NO' and relation['Z'] == 'NO' and relation['C'] == 'NO':
+    print('%s and %s are not related' % (pcset1, pcset2))

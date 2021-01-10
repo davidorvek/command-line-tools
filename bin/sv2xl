@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+import openpyxl
+import csv
+import sys
+
+if len(sys.argv) == 1:
+    print('Error: Not enough arguments.', file = sys.stderr)
+    sys.exit()
+
+elif len(sys.argv) > 2:
+    print('Error: Too many arguments.', file = sys.stderr)
+    sys.exit()
+
+elif sys.argv[1] == '-h':
+    with open('/users/davidorvek/command-line-tools/helpscrn/sv2xl.hlp', 'r') as file:
+        contents = file.read()
+    print(contents)
+    sys.exit()
+
+else:
+    in_file = sys.argv[1]
+
+m = 1
+
+if '.tsv' in in_file:
+    try:
+        open(in_file)
+    except:
+        print('Error: No such file.', file = sys.stderr)
+        sys.exit()
+    new_name = in_file.replace('.tsv', '.xlsx')
+    with open(in_file, 'r') as tsv_file:
+        tsv_reader = csv.reader(tsv_file, delimiter = '\t')
+        with open(new_name, 'w+') as xlsx_file:
+            wb = openpyxl.Workbook()
+            sheet = wb.active
+            for row in tsv_reader:
+                n = 1
+                for item in row:
+                    current_cell = sheet.cell(row = m, column = n)
+                    current_cell.value = item
+                    n += 1
+                m += 1
+        wb.save(new_name)
+
+
+elif '.csv' in in_file:
+    try:
+        open(in_file)
+    except:
+        print('Error: No such file.', file = sys.stderr)
+        sys.exit()
+    new_name = in_file.replace('.csv', '.xlsx')
+    with open(in_file, 'r') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter = ',')
+        with open(new_name, 'w+') as xlsx_file:
+            wb = openpyxl.Workbook()
+            sheet = wb.active
+            for row in csv_reader:
+                n = 1
+                for item in row:
+                    current_cell = sheet.cell(row = m, column = n)
+                    current_cell.value = item
+                    n += 1
+                m += 1
+        wb.save(new_name)
+
+else:
+    print('Error: file not .csv or .tsv', file = sys.stderr)
+    sys.exit()

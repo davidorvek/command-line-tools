@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+import openpyxl
+import csv
+import sys
+import json
+
+# Catching errors and handling option
+if len(sys.argv) < 2:
+    print('Error: Not enough arguments.', file = sys.stderr)
+    sys.exit()
+
+elif len(sys.argv) == 2:
+    if sys.argv[1] == '-h':
+        with open('/users/davidorvek/command-line-tools/helpscrn/xlconv.hlp', 'r') as file:
+            contents = file.read()
+            print(contents)
+        sys.exit()
+    else:
+        print('Error: Not enough arguments.', file = sys.stderr)
+        sys.exit()
+
+elif len(sys.argv) == 3:
+    option = sys.argv[1]
+    in_file = sys.argv[2]
+    try:
+        open(in_file)
+    except:
+        print("Error: No such file '%s'" % (in_file), file = sys.stderr)
+        sys.exit()
+    try:
+        openpyxl.load_workbook(in_file)
+    except:
+        print("Error: '%s' is not an Excel spreadsheet" % (in_file), file = sys.stderr)
+        sys.exit()
+
+else:
+    print('Error: Too many arguments.', file = sys.stderr)
+    sys.exit()
+
+# Converting the file
+wb = openpyxl.load_workbook(in_file)
+sheets = wb.sheetnames
+
+# To a .csv file
+if option == '-c':
+    for sheet in sheets:
+        current_sheet = wb[sheet]
+        new_name = in_file.replace('.xlsx', '') + '_' + sheet.replace(' ', '_') + '.csv'
+        with open(new_name, 'w+') as out_file:
+            writer = csv.writer(out_file, delimiter = ',')
+            n = current_sheet.max_row
+            for i in range(n):
+                row = [j.value for j in list(current_sheet.rows)[i]]
+                writer.writerow(row)
+
+# To a .tsv file
+elif option == '-t':
+    for sheet in sheets:
+        current_sheet = wb[sheet]
+        new_name = in_file.replace('.xlsx', '') + '_' + sheet.replace(' ', '_') + '.tsv'
+        with open(new_name, 'w+') as out_file:
+            writer = csv.writer(out_file, delimiter = '\t')
+            n = current_sheet.max_row
+            for i in range(n):
+                row = [j.value for j in list(current_sheet.rows)[i]]
+                writer.writerow(row)
+
+# To a json file organized by columns
+elif option == '-jc':
+    for sheet in sheets:
+        current_sheet = wb[sheet]
+        n = current_sheet.max_column
+        new_name = in_file.replace('.xlsx', '') + '_' + sheet.replace(' ', '_') + '.json'
+        object = {}
+        keys = [str(j.value) for j in list(current_sheet.rows)[0]]
+        for key in keys:
+            object[key] = []
+        for i in range(n):
+            column = [str(j.value) for j in list(current_sheet.columns)[i]]
+            del column[0]
+            object[keys[i]] = column
+        with open(new_name, 'w+') as out_file:
+            json.dump(object, out_file, indent = 2)
+
+# To a json file organized by rows
+elif option == '-jr':
+    for sheet in sheets:
+        current_sheet = wb[sheet]
+        n = current_sheet.max_row
+        new_name = in_file.replace('.xlsx', '') + '_' + sheet.replace(' ', '_') + '.json'
+        object = {}
+        row_keys = [str(j.value) for j in list(current_sheet.columns)[0]]
+        column_keys = [str(j.value) for j in list(current_sheet.rows)[0]]
+        del column_keys[0]
+        for row_key in row_keys:
+            object[row_key] = {}
+        for i in range(n):
+            row = [str(j.value) for j in list(current_sheet.rows)[i]]
+            del row[0]
+            for j in range(len(row)):
+                object[row_keys[i]][column_keys[j]] = row[j]
+        with open(new_name, 'w+') as out_file:
+            json.dump(object, out_file, indent = 2)
+
+else:
+    print('Error: invalid option.', file = sys.stderr)
+    sys.exit()

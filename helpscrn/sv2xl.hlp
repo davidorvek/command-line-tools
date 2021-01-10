@@ -1,0 +1,14 @@
+
+SV2XL: Converts a .tsv or .csv file to an Excel spreadsheet
+
+Inputs processed:
+
+	A filename with a .tsv or .csv extension
+
+Syntax:
+
+	sv2xl [filename]
+
+Options:
+
+	-h : print the help screen

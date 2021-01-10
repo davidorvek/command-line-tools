@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+import sys
+
+to_find = sys.argv[1]
+
+file = sys.argv[2]
+
+with open(file, 'r') as open_file:
+    lines = open_file.readlines()
+    lines = [line.rstrip() for line in lines]
+
+for line in lines:
+    if to_find in line:
+        print(line)

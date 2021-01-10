@@ -1,0 +1,16 @@
+
+TO0: Prints the given pitch-class set transposed to start on 0
+
+Inputs processed:
+
+	A pitch-class set in the form of a string with no spaces that uses
+	the integers 0-9 and T and E for 10 and 11 
+
+Syntax:
+
+	to0 [pitch-class set]
+
+Options:
+
+	-h : print the help screen
+

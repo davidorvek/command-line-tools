@@ -1,0 +1,14 @@
+
+SRM: "Safely" removes a file by moving it to a trash directory that is emptied monthly
+
+Inputs processed:
+
+	A filename
+
+Syntax:
+
+	srm [filename]
+
+Options:
+
+	-h : print the help screen

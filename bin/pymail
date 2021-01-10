@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+import sys
+import mymail
+from datetime import datetime
+
+if len(sys.argv) == 1:
+    now = datetime.now()
+    date = str("%s-%s-%s" % (now.month, now.day, now.year))
+    subject = date
+
+    message = []
+    print("Enter your message. Press control+D to send\n")
+
+    while True:
+        try:
+            line = input("> ")
+        except EOFError:
+            break
+        message.append(line)
+
+    formatted_message = '\n'.join(message)
+    try:
+        mymail.send_mail('davideo23@yahoo.com', subject, formatted_message)
+        print("Message sent!")
+    except:
+        print("Error. Please try again")
+
+else:
+    if sys.argv[1] == "-v":
+        recipient = input("To: ")
+        subject = input("Subject: ")
+        message = []
+        print("Message (press control+D to send):")
+        while True:
+            try:
+                line = input("> ")
+            except EOFError:
+                break
+            message.append(line)
+
+        formatted_message = '\n'.join(message)
+        mymail.send_mail(recipient, subject, formatted_message)
+        print("Message sent!")

@@ -1,0 +1,16 @@
+
+SUBSETS: Prints the subsets of the pitch-class set as Forte numbers
+
+Inputs processed:
+
+	-A pitch-class set in the form of a string with no spaces that uses
+	the integers 0-9 and T and E for 10 and 11
+	-An optional cardinality to limit output
+
+Syntax:
+
+	subsets [pitch-class set] [cardinality]
+
+Options:
+
+	-h : print the help screen

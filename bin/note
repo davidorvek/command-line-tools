@@ -1,0 +1,7 @@
+#!/usr/local/bin/bash
+
+file_name=$(date +%s)
+
+cd ~/Desktop
+touch $file_name.txt
+open -a TextEdit $file_name.txt

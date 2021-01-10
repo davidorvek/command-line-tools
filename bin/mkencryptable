@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+import random
+import json
+import sys
+
+if len(sys.argv) > 1:
+    if sys.argv[1] == '-h':
+        with open('/users/davidorvek/command-line-tools/helpscrn/mkencryptable.hlp', 'r') as file:
+            contents = file.read()
+        print(contents)
+        sys.exit()
+    else:
+        print('Error: Not a valid option. See help screen (invoked with mkencryptable -h)', file = sys.stderr)
+        sys.exit()
+else:
+    encryption_dictionary = {}
+    decryption_dictionary = {}
+
+    chars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+             'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B',
+             'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+             'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3',
+             '4', '5', '6', '7', '8', '9', '`', '~', '!', '@', '#', '$', '%', '^',
+             '&', '*', '(', ')', '-', '_', '=', '+', ',', '<', '.', '>', '/', '?',
+             ';', ':', '[', '{', ']', '}', '|', '"', '\'', ' ', '\t', '\n']
+
+    shuffle = [i for i in chars]
+    random.shuffle(shuffle)
+    random.shuffle(chars)
+
+    for i in range(len(chars)):
+        encryption_dictionary[chars[i]] = shuffle[i]
+        decryption_dictionary[shuffle[i]] = chars[i]
+
+    with open('encryption_dictionary.json', 'w+') as file:
+        json.dump(encryption_dictionary, file, indent = 2)
+
+    with open('decryption_dictionary.json', 'w+') as file:
+        json.dump(decryption_dictionary, file, indent = 2)

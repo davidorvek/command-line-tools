@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+import os, sys, time
+
+if sys.argv[1] == "-h":
+    with open('/users/davidorvek/command-line-tools/helpscrn/srm.hlp', 'r') as file:
+        contents = file.read()
+    print(contents)
+    sys.exit()
+else:
+    for f in sys.argv[1:]:
+        if f in os.listdir("/users/davidorvek/Trash"):
+            try:
+                # ensures that files with the same name already in trash aren't overwritten
+                os.rename(f, "/users/davidorvek/Trash/%s_%s" % (int(time.time()), f))
+            except:
+                print('Error: "%s" does not exist.' % f, file = sys.stderr)
+                sys.exit()
+        else:
+            try:
+                os.rename(f, "/users/davidorvek/Trash/%s" % (f))
+            except:
+                print('Error: "%s" does not exist.' % f, file = sys.stderr)
+                sys.exit()

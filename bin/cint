@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+import pctools as pct
+import sys
+
+allowable_input = '0123456789TE'
+input_length = len(sys.argv)
+
+# Input is either coming from a pipe or the user has just entered the script name
+if input_length == 1:
+    try:
+        pcsets = [i.rstrip() for i in sys.stdin.readlines()]
+    except:
+        print('\nERROR: Please enter a pcset', file = sys.stderr)
+        sys.exit()
+
+# Input is coming from the user
+elif input_length == 2:
+    # Check for -h
+    if sys.argv[1] == '-h':
+        with open('/users/davidorvek/command-line-tools/helpscrn/cint.hlp', 'r') as file:
+            contents = file.read()
+        print(contents)
+        sys.exit()
+    # Check for another option (not allowed)
+    elif sys.argv[1][0] == '-' and sys.argv[1] != '-h':
+        print('ERROR: No options available for cint', file = sys.stderr)
+        sys.exit()
+    else:
+        pcset = sys.argv[1]
+
+# Too many arguments
+else:
+    print('ERROR: Too many arguments. See help screen (invoked with cint -h) for correct usage', file = sys.stderr)
+    sys.exit()
+
+## Catches common alternatives for pcset notation
+# Multiple sets from stdin
+try:
+    if pcsets:
+        for pcset in pcsets:
+            rep_with_T = ['t', 'a', 'A']
+            rep_with_E = ['e', 'b', 'B']
+            for i in rep_with_T:
+                if i in pcset:
+                    pcset = pcset.replace(i, 'T')
+            for j in rep_with_E:
+                if j in pcset:
+                    pcset = pcset.replace(j, 'E')
+
+            # Checks pcset for invalid characters
+            for k in pcset:
+                if k not in allowable_input:
+                    print("ERROR: '%s' is not a valid character" % (k), file = sys.stderr)
+                    sys.exit()
+            # Converts input to a list, finds the interval string, and prints it
+            print(pct.string2vector(pct.array2string(pct.cint(pct.string2array(pcset)))))
+
+# One set from user
+except:
+    rep_with_T = ['t', 'a', 'A']
+    rep_with_E = ['e', 'b', 'B']
+    for i in rep_with_T:
+        if i in pcset:
+            pcset = pcset.replace(i, 'T')
+    for j in rep_with_E:
+        if j in pcset:
+            pcset = pcset.replace(j, 'E')
+
+    # Checks pcset for invalid characters
+    for k in pcset:
+        if k not in allowable_input:
+            print("ERROR: '%s' is not a valid character" % (k), file = sys.stderr)
+            sys.exit()
+    # Converts input to a list, finds the interval string, and prints it
+    print(pct.string2vector(pct.array2string(pct.cint(pct.string2array(pcset)))))

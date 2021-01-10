@@ -1,0 +1,18 @@
+
+XLCONV: Converts an Excel spreadsheet into various other file formats
+
+Inputs processed:
+
+	A filename with a .xlsx extension
+
+Syntax:
+
+	xlconv [-ctjcjr] [filename] 
+
+Options:
+
+	-h : print the help screen
+	-c : converts to a comma-separated file (.csv)
+	-t : converts to a tab-separated file (.tsv)
+	-jc : converts to a json file with each column as an object
+	-jr : converts to a json file with each row as an object

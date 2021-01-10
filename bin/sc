@@ -1,0 +1,139 @@
+#!/usr/bin/env python3
+import pctools as pct
+import sys
+
+input_length = len(sys.argv)
+
+# Either the forte number is being piped from another program
+# or the user is not providing any arguments
+if input_length == 1:
+    try:
+        forte_number = sys.stdin.read().rstrip()
+        option = '-a'
+    except:
+        print('')
+        sys.exit()
+
+# Input could be coming from the user or a pipe
+elif input_length == 2:
+    if sys.argv[1] == '-h':
+        # Prints the help page
+        with open('/users/davidorvek/command-line-tools/helpscrn/sc.hlp', 'r') as file:
+            contents = file.read()
+        print(contents)
+        sys.exit()
+    elif sys.argv[1][0] != '-':
+        forte_number = sys.argv[1]
+        option = '-a'
+    else:
+        try:
+            forte_number = sys.stdin.read().rstrip()
+            option = sys.argv[1]
+        except:
+            print('\nERROR: Incorrect usage. See help screen (invoked with sc -h)', file = sys.stderr)
+            sys.exit()
+
+# Input could only be coming from the user
+elif input_length == 3:
+    option = sys.argv[1]
+    forte_number = sys.argv[2]
+
+# Too many arguments
+else:
+    print('ERROR: Too many arguments. See help screen (invoked with sc -h) for correct usage', file = sys.stderr)
+    sys.exit()
+
+## Checking input for valid characters
+# Check for valid Forte number
+if forte_number not in pct.sc:
+    # Suggest correct number if z is left off
+    variant = "%s-z%s" % (forte_number[0], forte_number[2:len(forte_number)])
+    if variant in pct.sc:
+        print("ERROR: '%s' is not a valid Forte number. Did you mean '%s'?" % (forte_number, variant), file = sys.stderr)
+        sys.exit()
+    else:
+        print("ERROR: '%s' is not a valid Forte number" % (forte_number), file = sys.stderr)
+        sys.exit()
+
+## Options
+# Print prime form
+if option == '-p':
+    prime = pct.array2string(pct.sc[forte_number]['prime'])
+    forte_prime = pct.array2string(pct.sc[forte_number]['forte'])
+    # Check if Rahn and Forte primes are different
+    if pct.sc[forte_number]['forte'] == 'NA':
+        print('%s prime form: %s' % (forte_number, prime))
+    else:
+        print('%s Rahn prime form:  %s\n%s Forte prime form: %s' % (forte_number, prime, forte_number, forte_prime))
+
+# Print interval vector
+elif option == '-v':
+    iv = pct.string2vector(pct.array2string(pct.sc[forte_number]['iv']))
+    print('%s innterval vector: %s' % (forte_number, iv))
+
+# Print z partner
+elif option == '-z':
+    z = pct.sc[forte_number]['z']
+    print('%s z partner: %s' % (forte_number, z))
+
+# Print set class that given set class maps to under the multiplicative transformation
+elif option == '-m':
+    mult = pct.sc[forte_number]['m']
+    print('%s M parnter: %s' % (forte_number, mult))
+
+# Prints forte number of the complement of the given set
+elif option == '-c':
+    complement = pct.sc[forte_number]['complement']
+    print("%s complement: %s" % (forte_number, complement))
+
+# Print degrees of symmetry
+elif option == '-s':
+    sym = str(pct.deg_sym(pct.sc[forte_number]['prime'])).replace(']',')').replace('[','(').replace(' ','')
+    print('%s degrees of symmetry: %s' % (forte_number, sym))
+
+# Print transpositional invariance vector
+elif option == '-t':
+    t_invar = pct.string2vector(pct.array2string(pct.t_invar(pct.sc[forte_number]['prime'])))
+    print('%s transpositional invariance: %s' % (forte_number, t_invar))
+
+# Print inversional invariance vector
+elif option == '-i':
+    i_invar = pct.string2vector(pct.array2string(pct.i_invar(pct.sc[forte_number]['prime'])))
+    print('%s inversional invariance: %s' % (forte_number, i_invar))
+
+# Print all data (default if no option)
+elif option == '-a' or option in pct.sc:
+    prime = pct.array2string(pct.sc[forte_number]['prime'])
+    forte_prime = pct.array2string(pct.sc[forte_number]['forte'])
+    iv = pct.string2vector(pct.array2string(pct.sc[forte_number]['iv']))
+    z = pct.sc[forte_number]['z']
+    mult = pct.sc[forte_number]['m']
+    complement = pct.sc[forte_number]['complement']
+    sym = str(pct.deg_sym(pct.sc[forte_number]['prime'])).replace(']',')').replace('[','(').replace(' ','')
+    t_invar = pct.string2vector(pct.array2string(pct.t_invar(pct.sc[forte_number]['prime'])))
+    i_invar = pct.string2vector(pct.array2string(pct.i_invar(pct.sc[forte_number]['prime'])))
+
+    if pct.sc[forte_number]['forte'] == 'NA':
+        print('Prime form:          %s'\
+        '\nInterval vector:     %s'\
+        '\nZ partner:           %s'\
+        '\nM partner:           %s'\
+        '\nComplement:          %s'\
+        '\nDegrees of symmetry: %s'\
+        '\nT invariance:        %s'\
+        '\nI invariance:        %s'\
+        % (prime, iv, z, mult, complement, sym, t_invar, i_invar))
+    else:
+        print('Rahn prime form:     %s'\
+        '\nForte prime form:    %s'\
+        '\nInterval vector:     %s'\
+        '\nZ partner:           %s'\
+        '\nM partner:           %s'\
+        '\nComplement:          %s'\
+        '\nDegrees of symmetry: %s'\
+        '\nT invariance:        %s'\
+        '\nI invariance:        %s'\
+        % (prime, forte_prime, iv, z, mult, complement, sym, t_invar, i_invar))
+
+else:
+    print("ERROR: '%s' is not a valid option. See help screen (invoked with sc -h) for available options" % (option), file = sys.stderr)

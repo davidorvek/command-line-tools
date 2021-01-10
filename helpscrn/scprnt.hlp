@@ -1,0 +1,15 @@
+
+SCPRNT: Prints all Forte numbers and their prime forms
+
+Inputs processed:
+
+	NONE
+
+Syntax:
+
+	rndset
+
+Options:
+
+	-h : print the help screen
+
